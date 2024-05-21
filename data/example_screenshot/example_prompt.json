@@ -1,0 +1,32 @@
+[{
+    "role": "user",
+    "parts": [
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/pop_1.png",
+        "For Tester: The above screenshot is an example of a popup window. The UI element tagged with [7, 8, 9] is a popup, so you should prioritize clicking on these elements to manage or close the popup before interacting with other elements of the app.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/pop_2.png",
+        "For Tester: The above screenshot is an example of a popup window. The UI element tagged with [8, 9, 10] is a popup, so you should prioritize clicking on these elements to manage or close the popup before interacting with other elements of the app.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/pop_3.png",
+        "For Tester: The above screenshot is an example of a popup window. The UI element tagged with [3, 4, 10, 11, 12, 13, 14] is a popup, so you should prioritize clicking on these elements to manage or close the popup before interacting with other elements of the app.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/pop_4.png",
+        "For Tester: The above screenshot is an example of a popup window. The UI element tagged with [4, 7, 8, 9, 10, 11, 12, 13, 14] is a popup, so you should prioritize clicking on these elements to manage or close the popup before interacting with other elements of the app.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/video_1.png",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/video_1_aft.png",
+        "For Examiner: The above two screenshots depict an invalid click since, although the frames are different, they only show different moments of a video, without any actionable click resulting in a functional change in the app.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/video_2.png",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/video_2_aft.png",
+        "For Examiner: The above two screenshots depict an invalid click since, although the frames are different, they only show different moments of a video, without any actionable click resulting in a functional change in the app.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/load_1.png",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/load_1_aft.png",
+        "For Examiner: The above two screenshots depict an invalid action. Despite the two different frames, both are part of a loading screen sequence. This indicates no actual operation was performed between the two states, thus rendering the click invalid.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/sucess_1.png",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/sucess_1_aft.png",
+        "For Examiner: The above two screenshots depict a valid action since the two frames are different, showing a change in the UI that confirms the function of the clicked button has been activated.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/sucess_2.png",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/sucess_2_aft.png",
+        "For Examiner: The above two screenshots depict a valid action since the two frames are different, showing a change in the UI that confirms the function of the clicked button has been activated.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/sucess_3.png",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/sucess_3_aft.png",
+        "For Examiner: The above two screenshots depict a valid action since the two frames are different, showing a change in the UI that confirms the function of the clicked button has been activated."
+    ]
+}
+]

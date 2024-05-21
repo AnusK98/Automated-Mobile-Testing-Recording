@@ -1,0 +1,614 @@
+{
+    "compos": [
+        {
+            "id": 0,
+            "class": "Compo",
+            "height": 17,
+            "width": 20,
+            "position": {
+                "column_min": 471,
+                "row_min": 25,
+                "column_max": 491,
+                "row_max": 42
+            }
+        },
+        {
+            "id": 1,
+            "class": "Compo",
+            "height": 17,
+            "width": 17,
+            "position": {
+                "column_min": 492,
+                "row_min": 25,
+                "column_max": 509,
+                "row_max": 42
+            }
+        },
+        {
+            "id": 2,
+            "class": "Compo",
+            "height": 18,
+            "width": 11,
+            "position": {
+                "column_min": 518,
+                "row_min": 25,
+                "column_max": 529,
+                "row_max": 43
+            }
+        },
+        {
+            "id": 3,
+            "class": "Compo",
+            "height": 32,
+            "width": 33,
+            "position": {
+                "column_min": 20,
+                "row_min": 89,
+                "column_max": 53,
+                "row_max": 121
+            }
+        },
+        {
+            "id": 4,
+            "class": "Compo",
+            "height": 36,
+            "width": 37,
+            "position": {
+                "column_min": 473,
+                "row_min": 87,
+                "column_max": 510,
+                "row_max": 123
+            }
+        },
+        {
+            "id": 5,
+            "class": "Compo",
+            "height": 40,
+            "width": 118,
+            "position": {
+                "column_min": 209,
+                "row_min": 96,
+                "column_max": 327,
+                "row_max": 136
+            }
+        },
+        {
+            "id": 6,
+            "class": "Compo",
+            "height": 3,
+            "width": 22,
+            "position": {
+                "column_min": 20,
+                "row_min": 272,
+                "column_max": 42,
+                "row_max": 275
+            }
+        },
+        {
+            "id": 7,
+            "class": "Compo",
+            "height": 17,
+            "width": 5,
+            "position": {
+                "column_min": 509,
+                "row_min": 312,
+                "column_max": 514,
+                "row_max": 329
+            }
+        },
+        {
+            "id": 8,
+            "class": "Compo",
+            "height": 168,
+            "width": 118,
+            "position": {
+                "column_min": 421,
+                "row_min": 437,
+                "column_max": 539,
+                "row_max": 605
+            }
+        },
+        {
+            "id": 9,
+            "class": "Compo",
+            "height": 21,
+            "width": 21,
+            "position": {
+                "column_min": 36,
+                "row_min": 746,
+                "column_max": 57,
+                "row_max": 767
+            }
+        },
+        {
+            "id": 10,
+            "class": "Compo",
+            "height": 58,
+            "width": 499,
+            "position": {
+                "column_min": 20,
+                "row_min": 804,
+                "column_max": 519,
+                "row_max": 862
+            }
+        },
+        {
+            "id": 11,
+            "class": "Compo",
+            "height": 38,
+            "width": 37,
+            "position": {
+                "column_min": 20,
+                "row_min": 919,
+                "column_max": 57,
+                "row_max": 957
+            }
+        },
+        {
+            "id": 12,
+            "class": "Compo",
+            "height": 17,
+            "width": 5,
+            "position": {
+                "column_min": 509,
+                "row_min": 930,
+                "column_max": 514,
+                "row_max": 947
+            }
+        },
+        {
+            "id": 13,
+            "class": "Compo",
+            "height": 27,
+            "width": 27,
+            "position": {
+                "column_min": 86,
+                "row_min": 1076,
+                "column_max": 113,
+                "row_max": 1103
+            }
+        },
+        {
+            "id": 14,
+            "class": "Compo",
+            "height": 23,
+            "width": 24,
+            "position": {
+                "column_min": 257,
+                "row_min": 1078,
+                "column_max": 281,
+                "row_max": 1101
+            }
+        },
+        {
+            "id": 15,
+            "class": "Compo",
+            "height": 27,
+            "width": 22,
+            "position": {
+                "column_min": 427,
+                "row_min": 1076,
+                "column_max": 449,
+                "row_max": 1103
+            }
+        },
+        {
+            "id": 16,
+            "class": "Compo",
+            "height": 21,
+            "width": 19,
+            "position": {
+                "column_min": 102,
+                "row_min": 1158,
+                "column_max": 121,
+                "row_max": 1179
+            }
+        },
+        {
+            "id": 17,
+            "class": "Compo",
+            "height": 21,
+            "width": 20,
+            "position": {
+                "column_min": 259,
+                "row_min": 1158,
+                "column_max": 279,
+                "row_max": 1179
+            }
+        },
+        {
+            "id": 18,
+            "class": "Compo",
+            "height": 21,
+            "width": 21,
+            "position": {
+                "column_min": 414,
+                "row_min": 1158,
+                "column_max": 435,
+                "row_max": 1179
+            }
+        },
+        {
+            "id": 19,
+            "class": "Text",
+            "height": 25,
+            "width": 101,
+            "position": {
+                "column_min": 75,
+                "row_min": 21,
+                "column_max": 176,
+                "row_max": 46
+            },
+            "text_content": "9:08\u03b1"
+        },
+        {
+            "id": 20,
+            "class": "Text",
+            "height": 25,
+            "width": 264,
+            "position": {
+                "column_min": 88,
+                "row_min": 171,
+                "column_max": 352,
+                "row_max": 196
+            },
+            "text_content": "trader joe's recalls cashews"
+        },
+        {
+            "id": 21,
+            "class": "Text",
+            "height": 27,
+            "width": 30,
+            "position": {
+                "column_min": 466,
+                "row_min": 170,
+                "column_max": 496,
+                "row_max": 197
+            },
+            "text_content": "6."
+        },
+        {
+            "id": 22,
+            "class": "Text",
+            "height": 21,
+            "width": 28,
+            "position": {
+                "column_min": 19,
+                "row_min": 245,
+                "column_max": 47,
+                "row_max": 266
+            },
+            "text_content": "AIl"
+        },
+        {
+            "id": 23,
+            "class": "Text",
+            "height": 26,
+            "width": 89,
+            "position": {
+                "column_min": 69,
+                "row_min": 243,
+                "column_max": 158,
+                "row_max": 269
+            },
+            "text_content": "Shopping"
+        },
+        {
+            "id": 24,
+            "class": "Text",
+            "height": 22,
+            "width": 68,
+            "position": {
+                "column_min": 182,
+                "row_min": 245,
+                "column_max": 250,
+                "row_max": 267
+            },
+            "text_content": "Images"
+        },
+        {
+            "id": 25,
+            "class": "Text",
+            "height": 26,
+            "width": 67,
+            "position": {
+                "column_min": 275,
+                "row_min": 242,
+                "column_max": 342,
+                "row_max": 268
+            },
+            "text_content": "Videos"
+        },
+        {
+            "id": 26,
+            "class": "Text",
+            "height": 22,
+            "width": 54,
+            "position": {
+                "column_min": 366,
+                "row_min": 245,
+                "column_max": 420,
+                "row_max": 267
+            },
+            "text_content": "News"
+        },
+        {
+            "id": 27,
+            "class": "Text",
+            "height": 26,
+            "width": 54,
+            "position": {
+                "column_min": 444,
+                "row_min": 243,
+                "column_max": 498,
+                "row_max": 269
+            },
+            "text_content": "Maps"
+        },
+        {
+            "id": 28,
+            "class": "Text",
+            "height": 26,
+            "width": 136,
+            "position": {
+                "column_min": 20,
+                "row_min": 310,
+                "column_max": 156,
+                "row_max": 336
+            },
+            "text_content": "Top stories"
+        },
+        {
+            "id": 29,
+            "class": "Text",
+            "height": 27,
+            "width": 406,
+            "position": {
+                "column_min": 18,
+                "row_min": 362,
+                "column_max": 424,
+                "row_max": 389
+            },
+            "text_content": "Trader Joe's cashews recalled due to"
+        },
+        {
+            "id": 30,
+            "class": "Text",
+            "height": 25,
+            "width": 166,
+            "position": {
+                "column_min": 18,
+                "row_min": 395,
+                "column_max": 184,
+                "row_max": 420
+            },
+            "text_content": "salmonella risk"
+        },
+        {
+            "id": 31,
+            "class": "Text",
+            "height": 24,
+            "width": 239,
+            "position": {
+                "column_min": 36,
+                "row_min": 621,
+                "column_max": 275,
+                "row_max": 645
+            },
+            "text_content": "Trader Joe's recalls some"
+        },
+        {
+            "id": 32,
+            "class": "Text",
+            "height": 22,
+            "width": 187,
+            "position": {
+                "column_min": 349,
+                "row_min": 622,
+                "column_max": 536,
+                "row_max": 644
+            },
+            "text_content": "Trader Joe's-brande"
+        },
+        {
+            "id": 33,
+            "class": "Text",
+            "height": 18,
+            "width": 254,
+            "position": {
+                "column_min": 37,
+                "row_min": 651,
+                "column_max": 291,
+                "row_max": 669
+            },
+            "text_content": "cashews in 16 states due to"
+        },
+        {
+            "id": 34,
+            "class": "Text",
+            "height": 21,
+            "width": 190,
+            "position": {
+                "column_min": 349,
+                "row_min": 649,
+                "column_max": 539,
+                "row_max": 670
+            },
+            "text_content": "cashews sold in 16 s"
+        },
+        {
+            "id": 35,
+            "class": "Text",
+            "height": 21,
+            "width": 140,
+            "position": {
+                "column_min": 36,
+                "row_min": 675,
+                "column_max": 176,
+                "row_max": 696
+            },
+            "text_content": "salmonella risk"
+        },
+        {
+            "id": 36,
+            "class": "Text",
+            "height": 18,
+            "width": 187,
+            "position": {
+                "column_min": 349,
+                "row_min": 677,
+                "column_max": 536,
+                "row_max": 695
+            },
+            "text_content": "recalled over salmol"
+        },
+        {
+            "id": 37,
+            "class": "Text",
+            "height": 17,
+            "width": 91,
+            "position": {
+                "column_min": 349,
+                "row_min": 704,
+                "column_max": 440,
+                "row_max": 721
+            },
+            "text_content": "concerns"
+        },
+        {
+            "id": 38,
+            "class": "Text",
+            "height": 40,
+            "width": 68,
+            "position": {
+                "column_min": 40,
+                "row_min": 725,
+                "column_max": 108,
+                "row_max": 765
+            },
+            "text_content": "I day ago\nCNN"
+        },
+        {
+            "id": 39,
+            "class": "Text",
+            "height": 21,
+            "width": 83,
+            "position": {
+                "column_min": 347,
+                "row_min": 725,
+                "column_max": 430,
+                "row_max": 746
+            },
+            "text_content": "2 days ago"
+        },
+        {
+            "id": 40,
+            "class": "Text",
+            "height": 18,
+            "width": 108,
+            "position": {
+                "column_min": 349,
+                "row_min": 747,
+                "column_max": 457,
+                "row_max": 765
+            },
+            "text_content": " NBC NewS"
+        },
+        {
+            "id": 41,
+            "class": "Text",
+            "height": 18,
+            "width": 87,
+            "position": {
+                "column_min": 73,
+                "row_min": 917,
+                "column_max": 160,
+                "row_max": 935
+            },
+            "text_content": "CBS NewS"
+        },
+        {
+            "id": 42,
+            "class": "Text",
+            "height": 18,
+            "width": 244,
+            "position": {
+                "column_min": 72,
+                "row_min": 942,
+                "column_max": 316,
+                "row_max": 960
+            },
+            "text_content": "https://www.cbsnews.com > news"
+        },
+        {
+            "id": 43,
+            "class": "Text",
+            "height": 26,
+            "width": 394,
+            "position": {
+                "column_min": 20,
+                "row_min": 981,
+                "column_max": 414,
+                "row_max": 1007
+            },
+            "text_content": "Trader Joe's recalls cashews over"
+        },
+        {
+            "id": 44,
+            "class": "Text",
+            "height": 26,
+            "width": 430,
+            "position": {
+                "column_min": 19,
+                "row_min": 1015,
+                "column_max": 449,
+                "row_max": 1041
+            },
+            "text_content": "salmonella risk. Here are the states .."
+        },
+        {
+            "id": 45,
+            "class": "Text",
+            "height": 21,
+            "width": 70,
+            "position": {
+                "column_min": 65,
+                "row_min": 1109,
+                "column_max": 135,
+                "row_max": 1130
+            },
+            "text_content": "Discover"
+        },
+        {
+            "id": 46,
+            "class": "Text",
+            "height": 18,
+            "width": 54,
+            "position": {
+                "column_min": 243,
+                "row_min": 1109,
+                "column_max": 297,
+                "row_max": 1127
+            },
+            "text_content": "Search"
+        },
+        {
+            "id": 47,
+            "class": "Text",
+            "height": 19,
+            "width": 50,
+            "position": {
+                "column_min": 414,
+                "row_min": 1110,
+                "column_max": 464,
+                "row_max": 1129
+            },
+            "text_content": "Saved"
+        }
+    ],
+    "img_shape": [
+        1200,
+        540,
+        3
+    ]
+}

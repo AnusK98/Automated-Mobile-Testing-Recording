@@ -1,0 +1,9 @@
+data/raw_screenshot/*
+data/som_processed/*
+data/uied_processed/*
+data/uied_processed/*
+data/video/*
+data/*.json
+data/*.txt
+config.py
+__pycache__/
