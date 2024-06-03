@@ -13,12 +13,13 @@ from tools.apply_som import apply_som
 from tools.install_apps import install_apps_on_emulator
 from UIED.run_single import run_single
 
-
+MANUAL = True
+REMOVE_COMPLETE_APPS = False
 INSTALL_APPS = False
 REMOVE = False
 AVD_NAME = "Medium_Phone_API_31_2"
-ACTION_PER_APP = 10
-WAIT_TIME = 4
+ACTION_PER_APP = 4
+WAIT_TIME = 2
 
 RAW_image_folder = os.path.join(config.Screenshot_Path, "raw_screenshot")
 UIED_processed_folder = os.path.join(config.Screenshot_Path, "uied_processed")
@@ -32,16 +33,20 @@ EXAMPLE_json = os.path.join(config.Screenshot_Path, f"example_screenshot", f"exa
 
 OCR_txt = os.path.join(config.Screenshot_Path, f"{AVD_NAME}_OCR.txt")
 
-def remove_all_images_and_create():
-    subprocess.run(["rm", "-rf", RAW_image_folder])
-    subprocess.run(["rm", "-rf", UIED_processed_folder])
-    subprocess.run(["rm", "-rf", SOM_processed_folder])
-    subprocess.run(["rm", "-rf", VIDEO_folder])
-
-    subprocess.run(["mkdir", RAW_image_folder])
-    subprocess.run(["mkdir", UIED_processed_folder])
-    subprocess.run(["mkdir", SOM_processed_folder])
-    subprocess.run(["mkdir", VIDEO_folder])
+def remove_all_images_and_create(action_json):
+    # Remove all the images and remove the video which is not in the action_json
+    for folder in [RAW_image_folder, UIED_processed_folder, SOM_processed_folder]:
+        subprocess.run(["rm", "-r", folder])
+        subprocess.run(["mkdir", folder])
+    
+    video_list = [f for f in os.listdir(VIDEO_folder) if f.endswith(".mp4")]
+    for app in action_json:
+        for action in action_json[app]:
+            if action["video"].split("/")[-1] in video_list:
+                video_list.remove(action["video"].split("/")[-1])
+    
+    for video in video_list:
+        subprocess.run(["rm", os.path.join(VIDEO_folder, video)])
 
 def extract_id_number(input_str):
     match = re.search(r'id:\s*(\d+)', input_str)
@@ -179,8 +184,13 @@ def preprocess_image(image_name):
         image_location = os.path.join(RAW_image_folder, image_name)
         components = load_json(os.path.join(UIED_processed_folder, "merge", image_name.replace(".png", ".json")))
     else:
+        components = None
         image_location = get_screenshot(image_name, RAW_image_folder)
         components = process_ui_detection(image_location, UIED_processed_folder)
+        if not components:
+            # remove the image
+            subprocess.run(["rm", image_location])
+            return None, None
 
     scaled_components = apply_som(image_location, components, SOM_processed_folder)
     som_image_location = os.path.join(SOM_processed_folder, image_name)
@@ -189,14 +199,24 @@ def preprocess_image(image_name):
 def tester(API_key, message_json, index):
     image_name = f"{AVD_NAME}_{index}.png"
     som_image_location, scaled_components = preprocess_image(image_name)
+
+    if som_image_location is None:
+        return None, "Screenshot is not valid"
+
     if len(scaled_components["compos"]) == 0:
         return None, None
 
-    get_OCR_text(scaled_components)
-    response, messages, ui_id = send_image_prompt_to_VLM(som_image_location, API_key, "tester", message_json, OCR_txt)
-    if not response:
-        print(som_image_location, API_key, "tester", message_json, OCR_txt)
-        return None, None
+    if MANUAL:
+        print(som_image_location)
+        ui_id = int(input("Enter the UI ID: "))
+        messages = "Manual"
+    
+    else:
+        get_OCR_text(scaled_components)
+        response, messages, ui_id = send_image_prompt_to_VLM(som_image_location, API_key, "tester", message_json, OCR_txt)
+        if not response:
+            print(som_image_location, API_key, "tester", message_json, OCR_txt)
+            return None, None
     
     save_json(message_json, messages)
     return ui_id, scaled_components
@@ -205,14 +225,24 @@ def examiner(API_key, message_json, index, prev_scaled_components):
     image_name = f"{AVD_NAME}_{index}.png"
     som_image_location, scaled_components = preprocess_image(image_name)
 
+    if som_image_location is None:
+        return False, "Screenshot is not valid"
+
     # check if the components are the same
     if prev_scaled_components == scaled_components:
         return False, "Components are the same"
 
-    response, messages, _ = send_image_prompt_to_VLM(som_image_location, API_key, "examiner", message_json)
-    
-    if not response or extract_examiner_result(response) != "True":
-        return False, response
+    if MANUAL:
+        print(som_image_location)
+        response = bool(int(input("Is the screenshot valid? (1/0): ")))
+        if response == False:
+            scaled_components = "Manual"
+        messages = "Manual"
+    else:
+        response, messages, _ = send_image_prompt_to_VLM(som_image_location, API_key, "examiner", message_json)
+        
+        if not response or extract_examiner_result(response) != "True":
+            return False, response
     
     save_json(message_json, messages)
     return response, scaled_components
@@ -231,16 +261,43 @@ def clean_up(app_name):
     subprocess.run(["cp", EXAMPLE_json, MESSAGE_json])
     adb_restart_app(get_adb_id(AVD_NAME), app_name)
 
-def main():
-    action_json = {}
+def select_apps(action_json):
     with open(f"./data/{AVD_NAME}_apps.json", 'r') as file:
         app_names = json.load(file)[AVD_NAME]
 
+    if REMOVE_COMPLETE_APPS:
+        # Remove the apps that already in action_json keys
+        for app in list(action_json.keys()):
+            if app in app_names:
+                app_names.remove(app)
+
+    return app_names
+
+def count_video_numbers():
+    action_json = load_json(ACTION_json)
+    # count the video in the action_json
+    count = 0
+    for app in action_json:
+        count += len(action_json[app])
+    print(count)
+
+def main():
+    action_json = {}
+    if os.path.exists(ACTION_json):
+        action_json = load_json(ACTION_json)
+
+    app_names = select_apps(action_json)
+
     # Go through each app
-    for app_name in app_names[3:]:
+    for app_name in app_names[40:]:
         clean_up(app_name)
-        action_json[app_name] = []
-        index, repeat, api_count = 0, 0, 0
+
+        repeat, api_count = 0, 0
+        if app_name not in action_json:
+            action_json[app_name] = []
+            index = 0
+        else:
+            index = len(action_json[app_name])
 
         while index < ACTION_PER_APP: 
             
@@ -250,17 +307,19 @@ def main():
             api_count += 1
             repeat += 1
 
-            if repeat > 5:
-                break
             if repeat > 3:
+                if repeat > 5:
+                    break
                 clean_up(app_name)
-                subprocess.run(["rm", os.path.join(SOM_processed_folder, name[0])])
-                subprocess.run(["rm", os.path.join(SOM_processed_folder, name[1])])
+                subprocess.run(["rm", os.path.join(SOM_processed_folder, f"{AVD_NAME}_{name[0]}.png")])
+                subprocess.run(["rm", os.path.join(SOM_processed_folder, f"{AVD_NAME}_{name[1]}.png")])
 
             subprocess.run(["cp", MESSAGE_json, TMP_MESSAGE_json])
 
             # Tester
             ui_id, scaled_components = tester(api_key, TMP_MESSAGE_json, name[0])
+            if scaled_components == "Screenshot is not valid":
+                break
             if ui_id is None:
                 continue
             
@@ -269,10 +328,13 @@ def main():
 
             # Examiner
             exam_response, response = examiner(api_key, TMP_MESSAGE_json, name[1], scaled_components)
-            if exam_response is False:
+            if exam_response is False and response != None:
                 print(f"Failed : {response}")
-                if response == None: # means that it's because of the google cloud error
-                    repeat = min(0, repeat-1)
+                if response == "Screenshot is not valid":
+                    break
+                if MANUAL:
+                    os.remove(os.path.join(SOM_processed_folder, f"{AVD_NAME}_{name[0]}.png"))
+                    os.remove(os.path.join(SOM_processed_folder, f"{AVD_NAME}_{name[1]}.png"))
                 continue
             
             # Complete the action
@@ -291,7 +353,9 @@ if __name__ == "__main__":
         get_device_apps()
     
     if REMOVE:
-        remove_all_images_and_create()
+        action_json = load_json(ACTION_json)
+        remove_all_images_and_create(action_json)
 
-    main()
-    
+    # main()
+    count_video_numbers()
+    # preprocess_image("Medium_Phone_API_31_2_com.yogeshpaliyal.keypass_0.png")

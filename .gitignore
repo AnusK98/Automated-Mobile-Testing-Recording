@@ -7,3 +7,5 @@ data/*.json
 data/*.txt
 config.py
 __pycache__/
+test/
+manualdata/

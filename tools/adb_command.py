@@ -10,6 +10,20 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 
+def adb_turnoff(device_id):
+    subprocess.run(['adb', '-s', device_id, 'emu', 'kill'])
+    time.sleep(10)
+
+def adb_turnon(avd_name):
+    emulator_command_base = f"{config.Android_SDK_Path}/emulator/emulator -netdelay none -netspeed full -avd"
+    command = f"{emulator_command_base} {avd_name} -dns-server 8.8.8.8 -no-snapshot-load"
+    subprocess.Popen(command, shell=True)
+    time.sleep(40)
+
+def adb_restart(device_id, avd_name):
+    adb_turnoff(device_id)
+    adb_turnon(avd_name)
+
 def adb_click(x, y, device_id):
     subprocess.run(["adb", "-s", device_id, "shell", "input", "tap", str(x), str(y)])
 
@@ -79,22 +93,25 @@ def get_adb_id(avd_name):
     assert(avd_name), "AVD name cannot be empty"
     adb_id = None
     
-    for id in config.Emulator_IDs:
-        try:
-            command = f'adb -s {id} shell getprop | grep avd'
-            result = subprocess.run(command, shell=True, capture_output=True, text=True)
-            if avd_name in result.stdout:
-                adb_id = id
-                break
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            continue
-    assert(adb_id), f"Could not find the adb id for the AVD: {avd_name}"
+    while adb_id == None:
+        for id in config.Emulator_IDs:
+            try:
+                command = f'adb -s {id} shell getprop | grep avd'
+                result = subprocess.run(command, shell=True, capture_output=True, text=True)
+                if avd_name in result.stdout:
+                    adb_id = id
+                    break
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                continue
+        
+        if adb_id == None:
+            print("AVD not found")
+            time.sleep(10)
+
     return adb_id
 
 if __name__ == "__main__":
-    action = {
-        "type": "click",
-        "id": 2
-    }
+    take_screencap("emulator-5554", "/sdcard/screenshot.png")
+    pull_file("emulator-5554", "/sdcard/screenshot.png","./screenshot.png")
     

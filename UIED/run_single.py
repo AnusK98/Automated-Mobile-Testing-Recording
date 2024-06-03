@@ -8,11 +8,15 @@ import sys
 
 def resize_height_by_longest_edge(img_path, resize_length=1200):
     org = cv2.imread(img_path)
-    height, width = org.shape[:2]
-    if height > width:
-        return resize_length
+    if org is not None:
+        height, width = org.shape[:2]
+        if height > width:
+            return resize_length
+        else:
+            return int(resize_length * (height / width))
     else:
-        return int(resize_length * (height / width))
+        print('Image not found.')
+        return None
 
 
 def color_tips():
@@ -56,6 +60,8 @@ def run_single(input_path_img, output_root, resize_length=1200, remove_id=[]):
                   'merge-contained-ele':True, 'merge-line-to-paragraph':False, 'remove-bar':True}
 
     resized_height = resize_height_by_longest_edge(input_path_img, resize_length)
+    if resized_height is None:
+        return None
 
     is_ip = True
     is_clf = False

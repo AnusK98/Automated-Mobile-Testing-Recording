@@ -110,7 +110,7 @@ def text_cvt_orc_format(ocr_result):
 
 def text_cvt_orc_format_paddle(paddle_result):
     texts = []
-    if paddle_result is not None:
+    if paddle_result and paddle_result[0]:
         for i, line in enumerate(paddle_result[0]):
             points = np.array(line[0])
             location = {'left': int(min(points[:, 0])), 'top': int(min(points[:, 1])), 'right': int(max(points[:, 0])),
