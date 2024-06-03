@@ -12,7 +12,7 @@ from tools.ffprobe_tools import get_frame_timestamps_and_durations, video_to_who
 import config
 
 def main(source_dataset_path, target_dataset_path, emulator_id=None):
-    timestamp_filename = os.path.join(config.Screenshot_Path, f"")
+    timestamp_filename = os.path.join(config.DATA_FOLDER, f"")
     if emulator_id is not None:
         timestamp_filename = f'{emulator_id}_action.json'
 
@@ -74,6 +74,7 @@ def main(source_dataset_path, target_dataset_path, emulator_id=None):
         json.dump(gif_action_pairs, outfile, indent=4)
 
 if __name__ == "__main__":
-
+    source_dataset_path = '/data/Automated_Device_Testing/manualdata'
+    target_dataset_path = '/data/dataset/manual_validate/second'
     for emulator_id in ['Medium_Phone_API_31_2']:
-        main('/data/Automated_Device_Testing/manualdata', '/data/dataset/manual_validate/second', emulator_id=emulator_id)
+        main(source_dataset_path, target_dataset_path, emulator_id=emulator_id)

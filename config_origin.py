@@ -5,7 +5,7 @@ SCREEN_HEIGHT = 2400
 
 APPS_FOLDER = ""
 ANDROID_SDK_Path = ""
-DATA_FOLDER = ""
+DATA_FOLDER = "./data"
 
 IMAGE_TMP_FOLDER = os.path.join(DATA_FOLDER, "temp_images")
 RAW_IMAGE_FOLDER = os.path.join(IMAGE_TMP_FOLDER, "raw_screenshot")
