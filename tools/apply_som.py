@@ -1,7 +1,17 @@
 import cv2
-import json
 import os
 import numpy as np
+import sys
+import subprocess
+
+# Add the parent directory to the system path to allow imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import tools.utils as utils
+import config
+
+from tools.adb_command import *
+from UIED.run_single import run_single
+
 
 def apply_som(image_location, components, destination_path):
     '''
@@ -75,3 +85,67 @@ def visualize_number(img, center_x, center_y, number, font_scale=1.2, thickness=
     
     # Put the text (number) on the image, with the specified color
     cv2.putText(img, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, text_color, thickness)
+
+def process_ui_detection(image_location, destination_path):
+    '''
+    process the image to detect the UI elements (you can implement your own logic here)
+        input : image_location (str)
+        output : detected UI elements (json)
+    '''
+    command = ["mamba", "run", "-n", "uied", "python3", "/data/Automated_Device_Testing/UIED/run_single.py", image_location, destination_path]
+    result = subprocess.run(command, capture_output=True, text=True)
+    print(result.stdout)
+
+
+def get_screenshot(AVD_NAME, image_name, destination_path):
+    '''
+    get the screenshot (you can implement your own logic here), the image need to be saved in the destination_path folder
+        input : image_name (str)
+        output : image_location (str)
+    '''
+    adb_id = get_adb_id(AVD_NAME)
+    source_path = f"/sdcard/{image_name}"
+    destination_path = os.path.join(destination_path, image_name)
+
+    take_screenshot_and_pull(adb_id, source_path, destination_path)
+    return destination_path
+
+def preprocess_image(AVD_NAME, image_name):
+    components = None
+    if os.path.exists(os.path.join(config.SOM_PROCESSED_FOLDER, image_name)):
+        image_location = os.path.join(config.RAW_IMAGE_FOLDER, image_name)
+    else:
+        image_location = get_screenshot(AVD_NAME, image_name, config.RAW_IMAGE_FOLDER)
+        process_ui_detection(image_location, config.UIED_PROCESSED_FOLDER)
+    components = utils.load_json(os.path.join(config.UIED_PROCESSED_FOLDER, "merge", image_name.replace(".png", ".json")))
+    if not components:
+        # remove the image
+        subprocess.run(["rm", image_location])
+        return None, None
+
+    scaled_components = apply_som(image_location, components, config.SOM_PROCESSED_FOLDER)
+    som_image_location = os.path.join(config.SOM_PROCESSED_FOLDER, image_name)
+    return som_image_location, scaled_components
+
+def get_OCR_text(content):
+    OCR_text = ""
+    elements = content['compos']
+    for element in elements:
+        if element["class"] == "Text":
+            OCR_text += f"ID: {element['id']}, Text: {element['text_content']}\n"
+    
+    return OCR_text
+
+def get_bbox(ui_id, components):
+    # assert ui_id is number
+    assert(isinstance(ui_id, int)), "UI ID must be an integer"
+    assert(components), "Components cannot be empty"
+
+    if ui_id >= len(components['compos']):
+        print(f"UI ID {ui_id} is not found in the components")
+        ui_id = random.randint(0, len(components['compos']) - 1)
+    
+    ui_compos = components["compos"]
+    bbox = ui_compos[ui_id]["position"]
+
+    return bbox

@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
-from UIED.config.CONFIG_UIED import Config
+import os
+import sys
+from config.CONFIG_UIED import Config
 C = Config()
 
 

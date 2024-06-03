@@ -5,6 +5,7 @@ data/uied_processed/*
 data/video/*
 data/*.json
 data/*.txt
+data/temp_images/
 config.py
 __pycache__/
 test/

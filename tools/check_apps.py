@@ -1,5 +1,12 @@
 import subprocess
 import json
+import os
+import sys
+
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from tools.adb_command import get_adb_id
+import config
 
 def get_all_packages(emulator_name, android_app=True):
     # Get a list of all installed packages
@@ -50,24 +57,20 @@ def write_json(filepath, data):
     with open(filepath, "w") as file:
         json.dump(data, file, indent=4)
 
+def get_device_apps(AVD_NAME):
+    adb_id = get_adb_id(AVD_NAME)
+    all_packages = get_all_packages(adb_id, True)
+    launchable_apps = check_launchable_apps(all_packages, adb_id)
+
+    with open(os.join(config.DATA_FOLDER, f"{AVD_NAME}_apps.json"), "w") as file:
+        json.dump({AVD_NAME:launchable_apps}, file, indent=4)
+
+    return launchable_apps
+
+def read_device_apps(AVD_NAME):
+    with open(os.path.join(config.DATA_FOLDER, f"{AVD_NAME}_apps.json"), "r") as file:
+        return json.load(file)[AVD_NAME]
+
 if __name__ == "__main__":
-    json_path = "../settings/launchable_apps.json"
-
-    emulator_names = ["emulator-5554"]
-
-    andorid_apps = [True, False, False, False]
-    # Check which apps are launchable
-    for i, emulator_name in enumerate(emulator_names):
-            # Get the list of all packages
-        all_packages = get_all_packages(emulator_name, andorid_apps[i])
-        launchable_apps = check_launchable_apps(all_packages, emulator_name)
-
-        # Load existing data from JSON file
-        existing_data = read_json(json_path)
-        avd_name = get_emulator_id(emulator_name)
-
-        # Update the dictionary with new data
-        existing_data[avd_name] = launchable_apps
-
-        # Write the updated dictionary back to the JSON file
-        write_json(json_path, existing_data)
+    AVD_NAME = "Medium_Phone_API_31_2"
+    get_device_apps(AVD_NAME)

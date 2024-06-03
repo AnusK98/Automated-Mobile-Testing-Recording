@@ -5,7 +5,7 @@ import detect_compo.lib_ip.ip_draw as draw
 import detect_compo.lib_ip.ip_preprocessing as pre
 from detect_compo.lib_ip.Component import Component
 import detect_compo.lib_ip.Component as Compo
-from UIED.config.CONFIG_UIED import Config
+from config.CONFIG_UIED import Config
 C = Config()
 
 

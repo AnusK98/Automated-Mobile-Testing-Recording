@@ -106,3 +106,4 @@ if __name__ == '__main__':
     input_path_img = args.input_path_img
     output_root = args.output_root
     run_single(input_path_img, output_root)
+    print('Done!')

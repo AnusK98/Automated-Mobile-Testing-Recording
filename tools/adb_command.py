@@ -4,6 +4,7 @@ import subprocess
 import random
 import time
 import sys
+import threading
 
 # Add the parent directory to the system path to allow imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -15,7 +16,7 @@ def adb_turnoff(device_id):
     time.sleep(10)
 
 def adb_turnon(avd_name):
-    emulator_command_base = f"{config.Android_SDK_Path}/emulator/emulator -netdelay none -netspeed full -avd"
+    emulator_command_base = f"{config.ANDROID_SDK_Path}/emulator/emulator -netdelay none -netspeed full -avd"
     command = f"{emulator_command_base} {avd_name} -dns-server 8.8.8.8 -no-snapshot-load"
     subprocess.Popen(command, shell=True)
     time.sleep(40)
@@ -37,15 +38,17 @@ def pull_screen_record(device_id, device_path, destination_path):
     subprocess.run(["adb", "-s", device_id, "pull", device_path, destination_path])
     subprocess.run(["adb", "-s", device_id, "shell", "rm", device_path])
 
-def adb_restart_app(device_id, app_name):
-    adb_close_app(device_id, app_name)
-    adb_launch_app(device_id, app_name)
+def adb_restart_app(AVD, app_name):
+    adb_close_app(AVD, app_name)
+    adb_launch_app(AVD, app_name)
 
-def adb_close_app(device_id, app_name):
+def adb_close_app(AVD, app_name):
+    device_id = get_adb_id(AVD)
     subprocess.run(f"adb -s {device_id} shell am force-stop {app_name}", shell=True)
     time.sleep(2)
 
-def adb_launch_app(device_id, app_name):
+def adb_launch_app(AVD, app_name):
+    device_id = get_adb_id(AVD)
     subprocess.run(f"adb -s {device_id} shell monkey -p {app_name} -c android.intent.category.LAUNCHER 1", shell=True)
     time.sleep(2)
 
@@ -94,7 +97,7 @@ def get_adb_id(avd_name):
     adb_id = None
     
     while adb_id == None:
-        for id in config.Emulator_IDs:
+        for id in config.EMULATOR_IDS:
             try:
                 command = f'adb -s {id} shell getprop | grep avd'
                 result = subprocess.run(command, shell=True, capture_output=True, text=True)
@@ -106,10 +109,43 @@ def get_adb_id(avd_name):
                 continue
         
         if adb_id == None:
-            print("AVD not found")
+            print("AVD not found, retrying in 10 seconds or ctrl+c to exit.")
             time.sleep(10)
 
     return adb_id
+
+def do_action_and_recording(AVD_NAME, bbox, name, video_folder):
+    '''
+    perform the action on the UI element (you can implement your own logic here)
+        input : ui_id (int), components (json)
+        output : action_detail (json)
+    '''
+    
+    device_path = f"/sdcard/{name}.mp4"
+    target_path = os.path.join(video_folder, f"{name}.mp4")
+
+    x = (bbox['column_min'] + bbox['column_max']) // 2
+    y = (bbox['row_min'] + bbox['row_max']) // 2
+
+    adb_id = get_adb_id(AVD_NAME)
+
+    screen_record_thread = threading.Thread(target=start_screen_record, args=(adb_id, device_path))
+    screen_record_thread.start()
+    adb_click(x, y, adb_id)
+    time.sleep(2)
+    stop_screen_record(adb_id)
+    screen_record_thread.join()
+    pull_screen_record(adb_id, device_path, target_path)
+
+    # check if the video is correct format
+
+    action_detail = {
+        "video": target_path,
+        "type": "click",
+        "location": [x, y],
+        "bbox": bbox,
+    }
+    return action_detail
 
 if __name__ == "__main__":
     take_screencap("emulator-5554", "/sdcard/screenshot.png")

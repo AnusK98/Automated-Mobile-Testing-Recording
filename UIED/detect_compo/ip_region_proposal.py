@@ -9,7 +9,7 @@ import detect_compo.lib_ip.ip_draw as draw
 import detect_compo.lib_ip.ip_detection as det
 import detect_compo.lib_ip.file_utils as file
 import detect_compo.lib_ip.Component as Compo
-from UIED.config.CONFIG_UIED import Config
+from config.CONFIG_UIED import Config
 C = Config()
 
 
