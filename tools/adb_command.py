@@ -131,6 +131,7 @@ def do_action_and_recording(AVD_NAME, bbox, name, video_folder):
 
     screen_record_thread = threading.Thread(target=start_screen_record, args=(adb_id, device_path))
     screen_record_thread.start()
+    time.sleep(0.4)
     adb_click(x, y, adb_id)
     time.sleep(2)
     stop_screen_record(adb_id)

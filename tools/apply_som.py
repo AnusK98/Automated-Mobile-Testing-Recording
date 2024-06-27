@@ -92,7 +92,7 @@ def process_ui_detection(image_location, destination_path):
         input : image_location (str)
         output : detected UI elements (json)
     '''
-    command = ["mamba", "run", "-n", "uied-env", "python3", "/data/Automated_Device_Testing/UIED/run_single.py", image_location, destination_path]
+    command = ["mamba", "run", "-n", "uied", "python3", "/data/Automated_Device_Testing/UIED/run_single.py", image_location, destination_path]
     result = subprocess.run(command, capture_output=True, text=True)
     print(result.stdout)
 
@@ -114,14 +114,25 @@ def preprocess_image(AVD_NAME, image_name):
     components = None
     if os.path.exists(os.path.join(config.SOM_PROCESSED_FOLDER, image_name)):
         image_location = os.path.join(config.RAW_IMAGE_FOLDER, image_name)
+        components = utils.load_json(os.path.join(config.UIED_PROCESSED_FOLDER, "merge", image_name.replace(".png", ".json")))
     else:
-        image_location = get_screenshot(AVD_NAME, image_name, config.RAW_IMAGE_FOLDER)
-        process_ui_detection(image_location, config.UIED_PROCESSED_FOLDER)
-    components = utils.load_json(os.path.join(config.UIED_PROCESSED_FOLDER, "merge", image_name.replace(".png", ".json")))
-    if not components:
-        # remove the image
-        subprocess.run(["rm", image_location])
-        return None, None
+        repeat = 0
+        while components is None:
+            repeat += 1 
+            image_location = get_screenshot(AVD_NAME, image_name, config.RAW_IMAGE_FOLDER)
+            process_ui_detection(image_location, config.UIED_PROCESSED_FOLDER)
+            components = utils.load_json(os.path.join(config.UIED_PROCESSED_FOLDER, "merge", image_name.replace(".png", ".json")))
+            if components['compos'] is None or len(components['compos']) == 0:
+                # remove the image
+                subprocess.run(["rm", image_location])
+                components = None
+            if repeat > 3:
+                break
+    
+        if components is None:
+            # remove the image
+            subprocess.run(["rm", image_location])
+            return None, None
 
     scaled_components = apply_som(image_location, components, config.SOM_PROCESSED_FOLDER)
     som_image_location = os.path.join(config.SOM_PROCESSED_FOLDER, image_name)

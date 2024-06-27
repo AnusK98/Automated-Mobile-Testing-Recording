@@ -42,7 +42,7 @@ def main(source_dataset_path, target_dataset_path, emulator_id=None):
     for app_name, entries in actions_data.items():
         for entry in entries:  # Skip the app name, start from the first video entry
             video_name = entry["video"]
-            video_path = os.path.join(videos_path, video_name)
+            video_path = video_name
 
             if "type" not in entry or "location" not in entry or "bbox" not in entry:
                 continue
@@ -74,7 +74,7 @@ def main(source_dataset_path, target_dataset_path, emulator_id=None):
         json.dump(gif_action_pairs, outfile, indent=4)
 
 if __name__ == "__main__":
-    source_dataset_path = '/data/Automated_Device_Testing/manualdata'
-    target_dataset_path = '/data/dataset/manual_validate/second'
+    source_dataset_path = '/data/Automated_Device_Testing/data'
+    target_dataset_path = '/data/dataset/manual_validate/demo'
     for emulator_id in ['Medium_Phone_API_31_2']:
         main(source_dataset_path, target_dataset_path, emulator_id=emulator_id)

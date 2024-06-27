@@ -65,7 +65,7 @@ class Tester(Agent):
     def initialize_prompt(self, image_location, ocr_text):
         prompt = """
         You will be provided with a phone screenshot. Each UI element on the screen is tagged with a number. As an app tester exploring the app functionalities, your task is to decide which button to press next. Prioritize interacting with elements within any visible popup window. Additionally, if input boxes are present and the virtual keyboard is displayed, you may enter text. Formulate the text you wish to enter before starting to type, ensuring that each keystroke corresponds to a different key press tagged with a number. You are limited to entering a maximum of three characters per testing session, and these characters should be chosen randomly. After three keystrokes, you must refrain from further typing and continue exploring other functionalities of the app.
-        If the app requires logging in, please attempt to log in using Gmail. If there is an option to log in as a guest, prefer that method instead.
+        If the app requires logging in, please attempt to log in using Gmail. If there is an option to log in as a guest, prefer that method instead. Please avoid tapping the input boxes to enter text, if must, you can only type one character then proceed to the next action that is not type text.
         id: [number], reason: The UI element tagged with [number] is [description] because [explanation].
 
         For example:

@@ -62,7 +62,7 @@ def get_device_apps(AVD_NAME):
     all_packages = get_all_packages(adb_id, True)
     launchable_apps = check_launchable_apps(all_packages, adb_id)
 
-    with open(os.join(config.DATA_FOLDER, f"{AVD_NAME}_apps.json"), "w") as file:
+    with open(os.path.join(config.DATA_FOLDER, f"{AVD_NAME}_apps.json"), "w") as file:
         json.dump({AVD_NAME:launchable_apps}, file, indent=4)
 
     return launchable_apps
@@ -72,5 +72,5 @@ def read_device_apps(AVD_NAME):
         return json.load(file)[AVD_NAME]
 
 if __name__ == "__main__":
-    AVD_NAME = "Medium_Phone_API_31_2"
+    AVD_NAME = "Medium_Phone_API_31"
     get_device_apps(AVD_NAME)

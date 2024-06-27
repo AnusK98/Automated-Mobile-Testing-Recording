@@ -22,23 +22,43 @@ def get_action_json(AVD_NAME):
 def tester_pipeline(tester, AVD_NAME, iter_name):
     image_name = f"{iter_name}.png"
     som_image_location, scaled_components = preprocess_image(AVD_NAME, image_name) # Process the image and save it to the SOM_processed_folder
-    ocr_text = get_OCR_text(scaled_components)
-    api_key = random.choice(config.API_KEYS)
-    tester.initialize_prompt(som_image_location, ocr_text)
-    res = tester.send_prompt_to_VLM(api_key)
-    ui_id = extract_id_number(res)
+    ui_id = ""
+    while not isinstance(ui_id, int):
+        if MANUAL:
+            print(som_image_location)
+            ui_id = int(input("Enter the UI ID: "))
+            res = "Manual Mode"
+        else:
+            ocr_text = get_OCR_text(scaled_components)
+            api_key = random.choice(config.API_KEYS)
+            tester.initialize_prompt(som_image_location, ocr_text)
+            res = tester.send_prompt_to_VLM(api_key)
+            print("----------------- tester_pipeline -----------------")
+            print(res)
+            ui_id = extract_id_number(res)
     bbox = get_bbox(ui_id, scaled_components)
     return res, bbox
 
-def examiner_pipeline(examiner, AVD_NAME, iter_name):
-    image_name = f"{iter_name}.png"
-    som_image_location, scaled_components = preprocess_image(AVD_NAME, image_name) # Process the image and save it to the SOM_processed_folder
+def examiner_pipeline(examiner, AVD_NAME, iter_names):
+    image_names = [f"{x}.png" for x in iter_names]
+    som_image_location, scaled_components_1 = preprocess_image(AVD_NAME, image_names[1]) # Process the image and save it to the SOM_processed_folder
+    _, scaled_components_2 = preprocess_image(AVD_NAME, image_names[0]) # Process the image and save it to the SOM_processed_folder
+
+    if scaled_components_1 == scaled_components_2:
+        return False, False
+
+    if MANUAL:
+        print(som_image_location)
+        res = bool(int(input("True or False (1/0): ")))
+        return res, res
     api_key = random.choice(config.API_KEYS)
     examiner.initialize_prompt(som_image_location)
     return examiner.send_prompt_to_VLM(api_key)
 
 def check_reponse(res, names):
     if res is False :
+        os.remove(os.path.join(config.SOM_PROCESSED_FOLDER, f"{names[0]}.png"))
+        os.remove(os.path.join(config.SOM_PROCESSED_FOLDER, f"{names[1]}.png"))
         return 1
     return 0
 
@@ -66,17 +86,19 @@ def generate_dataset(AVD_NAME, app_name, action_number):
         res, bbox = tester_pipeline(tester, AVD_NAME, iter_names[0])
         res_code = check_reponse(res, iter_names)
         if res_code == 1:
-            break
+            continue
         
         #----------------- Action -----------------
         action_detail = do_action_and_recording(AVD_NAME, bbox, iter_names[0], config.VIDEO_FOLDER)
 
         #----------------- Examiner -----------------
         examiner.read_messages(tester.get_messages())
-        res = examiner_pipeline(examiner, AVD_NAME, iter_names[1])
+        res = examiner_pipeline(examiner, AVD_NAME, iter_names)
+        print("----------------- examiner_pipeline -----------------")
+        print(res)
         res_code = check_reponse(res, iter_names)
         if res_code == 1:
-            break
+            continue
         
         #----------------- Save -----------------
         messages = examiner.get_messages()
@@ -94,6 +116,6 @@ def main(AVD_NAME, ACTION_NUMBER):
 
 if __name__ == "__main__":
     build_data_folder()
-    AVD_NAME = "Medium_Phone_API_31_2"
-    ACTION_NUMBER = 5
+    AVD_NAME = "Medium_Phone_API_31"
+    ACTION_NUMBER = 12
     main(AVD_NAME, ACTION_NUMBER)
