@@ -92,7 +92,7 @@ def process_ui_detection(image_location, destination_path):
         input : image_location (str)
         output : detected UI elements (json)
     '''
-    command = ["mamba", "run", "-n", "uied-env", "python3", "./UIED/run_single.py", image_location, destination_path]
+    command = ["conda", "run", "python3", "./UIED/run_single.py", image_location, destination_path]
     result = subprocess.run(command, capture_output=True, text=True)
     print(result.stdout)
 
