@@ -10,6 +10,8 @@
         "/data/Automated_Device_Testing/screenshots/example_screenshot/pop_4.png",
         "For Tester: The above screenshot is an example of a popup window. The UI element tagged with [4, 7, 8, 9, 10, 11, 12, 13, 14] is a popup, so you should prioritize clicking on these elements to manage or close the popup before interacting with other elements of the app.",
         "/data/Automated_Device_Testing/screenshots/example_screenshot/video_1.png",
+        "For Tester: The above screenshot is an example of a Youtube video list. You should prioritize swiping up to explore more unshown contents.",
+        "/data/Automated_Device_Testing/screenshots/example_screenshot/video_1.png",
         "/data/Automated_Device_Testing/screenshots/example_screenshot/video_1_aft.png",
         "For Examiner: The above two screenshots depict an invalid click since, although the frames are different, they only show different moments of a video, without any actionable click resulting in a functional change in the app.",
         "/data/Automated_Device_Testing/screenshots/example_screenshot/video_2.png",

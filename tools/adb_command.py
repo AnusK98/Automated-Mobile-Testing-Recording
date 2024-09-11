@@ -28,6 +28,16 @@ def adb_restart(device_id, avd_name):
 def adb_click(x, y, device_id):
     subprocess.run(["adb", "-s", device_id, "shell", "input", "tap", str(x), str(y)])
 
+def adb_swipe(orientation, device_id):
+    if orientation == 'up':
+        subprocess.run(["adb", "-s", device_id, "shell", "input", "swipe", "540", "2000", "540", "400"])
+    elif orientation == 'down':
+        subprocess.run(["adb", "-s", device_id, "shell", "input", "swipe", "540", "400", "540", "2000"])
+    elif orientation == 'left':
+        subprocess.run(["adb", "-s", device_id, "shell", "input", "swipe", "810", "1200", "270", "1200"])
+    elif orientation == 'right':
+        subprocess.run(["adb", "-s", device_id, "shell", "input", "swipe", "270", "1200", "810", "1200"])
+
 def start_screen_record(device_id, device_path):
     subprocess.run(["adb", "-s", device_id, "shell", "screenrecord", device_path])
 
@@ -114,7 +124,7 @@ def get_adb_id(avd_name):
 
     return adb_id
 
-def do_action_and_recording(AVD_NAME, bbox, name, video_folder):
+def tap_and_recording(AVD_NAME, bbox, name, video_folder):
     '''
     perform the action on the UI element (you can implement your own logic here)
         input : ui_id (int), components (json)
@@ -147,6 +157,33 @@ def do_action_and_recording(AVD_NAME, bbox, name, video_folder):
         "bbox": bbox,
     }
     return action_detail
+
+def swipe_and_recording(AVD_NAME, orientation, name, video_folder):
+
+    device_path = f"/sdcard/{name}.mp4"
+    target_path = os.path.join(video_folder, f"{name}.mp4")
+    
+    adb_id = get_adb_id(AVD_NAME)
+
+    screen_record_thread = threading.Thread(target=start_screen_record, args=(adb_id, device_path))
+    screen_record_thread.start()
+    time.sleep(0.4)
+    adb_swipe(orientation, adb_id)
+    time.sleep(2)
+    stop_screen_record(adb_id)
+    screen_record_thread.join()
+    pull_screen_record(adb_id, device_path, target_path)
+
+    # check if the video is correct format
+
+    action_detail = {
+        "video": target_path,
+        "type": "swipe",
+        "orientation": orientation
+    }
+    return action_detail
+
+        
 
 if __name__ == "__main__":
     take_screencap("emulator-5554", "/sdcard/screenshot.png")

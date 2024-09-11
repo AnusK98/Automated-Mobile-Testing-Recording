@@ -14,6 +14,20 @@ def save_json(file_path, data):
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
+def extract_action_type(input_str):
+    match = re.search(r'action type:\s*([^,]+)', input_str)
+    if match:
+        return match.group(1)
+    else:
+        return None
+    
+def extract_orientation(input_str):
+    match = re.search(r'orientation:\s*([^,]+)', input_str)
+    if match:
+        return match.group(1)
+    else:
+        return None
+
 def extract_id_number(input_str):
     match = re.search(r'id:\s*(\d+)', input_str)
     if match:

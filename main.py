@@ -5,9 +5,9 @@ import random
 import config
 
 from tools.check_apps import read_device_apps
-from tools.adb_command import adb_restart_app, do_action_and_recording, adb_close_app
+from tools.adb_command import adb_restart_app, tap_and_recording, swipe_and_recording, adb_close_app
 from tools.apply_som import preprocess_image, get_OCR_text, get_bbox
-from tools.utils import save_json, load_json, extract_id_number, build_data_folder
+from tools.utils import save_json, load_json, extract_action_type, extract_orientation, extract_id_number, build_data_folder
 from agents.Agents import Tester, Examiner
 
 MANUAL = False
@@ -35,6 +35,7 @@ def tester_pipeline(tester, AVD_NAME, iter_name):
             res = tester.send_prompt_to_VLM(api_key)
             print("----------------- tester_pipeline -----------------")
             print(res)
+            print("AAAAA")
             ui_id = extract_id_number(res)
     bbox = get_bbox(ui_id, scaled_components)
     return res, bbox
@@ -89,7 +90,14 @@ def generate_dataset(AVD_NAME, app_name, action_number):
             continue
         
         #----------------- Action -----------------
-        action_detail = do_action_and_recording(AVD_NAME, bbox, iter_names[0], config.VIDEO_FOLDER)
+        action_type = extract_action_type(res)
+        orientation = extract_orientation(res)
+        if action_type == "tap":
+            print("TTT")
+            action_detail = tap_and_recording(AVD_NAME, bbox, iter_names[0], config.VIDEO_FOLDER)
+        elif action_type == "swipe":
+            print("SSS")
+            action_detail = swipe_and_recording(AVD_NAME, orientation, iter_names[0], config.VIDEO_FOLDER)
 
         #----------------- Examiner -----------------
         examiner.read_messages(tester.get_messages())
