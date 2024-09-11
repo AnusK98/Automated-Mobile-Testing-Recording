@@ -23,7 +23,8 @@ def tester_pipeline(tester, AVD_NAME, iter_name):
     image_name = f"{iter_name}.png"
     som_image_location, scaled_components = preprocess_image(AVD_NAME, image_name) # Process the image and save it to the SOM_processed_folder
     ui_id = ""
-    while not isinstance(ui_id, int):
+    orientation = 0
+    while (not isinstance(ui_id, int)) and (not isinstance(orientation, str)):
         if MANUAL:
             print(som_image_location)
             ui_id = int(input("Enter the UI ID: "))
@@ -35,10 +36,16 @@ def tester_pipeline(tester, AVD_NAME, iter_name):
             res = tester.send_prompt_to_VLM(api_key)
             print("----------------- tester_pipeline -----------------")
             print(res)
-            print("AAAAA")
-            ui_id = extract_id_number(res)
-    bbox = get_bbox(ui_id, scaled_components)
-    return res, bbox
+            action_type = extract_action_type(res)
+            if action_type == "tap":
+                ui_id = extract_id_number(res)
+                bbox = get_bbox(ui_id, scaled_components)
+                return res, bbox
+            elif action_type == "swipe":
+                orientation = extract_orientation(res)
+                return res, orientation
+    
+    
 
 def examiner_pipeline(examiner, AVD_NAME, iter_names):
     image_names = [f"{x}.png" for x in iter_names]
@@ -84,20 +91,17 @@ def generate_dataset(AVD_NAME, app_name, action_number):
 
         #----------------- Tester -----------------
         tester.read_messages(tmp_message)
-        res, bbox = tester_pipeline(tester, AVD_NAME, iter_names[0])
+        res, bbox_orientation = tester_pipeline(tester, AVD_NAME, iter_names[0])
         res_code = check_reponse(res, iter_names)
         if res_code == 1:
             continue
         
         #----------------- Action -----------------
         action_type = extract_action_type(res)
-        orientation = extract_orientation(res)
         if action_type == "tap":
-            print("TTT")
-            action_detail = tap_and_recording(AVD_NAME, bbox, iter_names[0], config.VIDEO_FOLDER)
+            action_detail = tap_and_recording(AVD_NAME, bbox_orientation, iter_names[0], config.VIDEO_FOLDER)
         elif action_type == "swipe":
-            print("SSS")
-            action_detail = swipe_and_recording(AVD_NAME, orientation, iter_names[0], config.VIDEO_FOLDER)
+            action_detail = swipe_and_recording(AVD_NAME, bbox_orientation, iter_names[0], config.VIDEO_FOLDER)
 
         #----------------- Examiner -----------------
         examiner.read_messages(tester.get_messages())
