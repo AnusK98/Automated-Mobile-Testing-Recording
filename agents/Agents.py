@@ -78,6 +78,7 @@ class Tester(Agent):
         ensuring that each keystroke corresponds to a different key press tagged with a number. Check the text entering bar before you decide to type, if there are
         more than three alphabets, then stop typing and tap enter or search button. Refrain from further typing and continue exploring other functionalities of the app.
         6. Please avoid tapping the input boxes to enter text, if must, you can only type one character then proceed to the next action that is not type text.
+        Your output must be in format as given below:
         action type: [tap], id: [number], reason: The UI element tagged with [number] is [description] because [explanation].
         action type: [swipe], orientation: [up/down/left/right], reason: Swipe the current screen because[explanation].
 
@@ -85,8 +86,8 @@ class Tester(Agent):
         action type: tap, id: 5, reason: The UI element tagged with 5 is a next button because I want to proceed to the next screen.
         action type: swipe, orientation: up, reason: Swipe the current screen because I want to explore the following unshown content.
 
-        Avoid repeating any action that has been performed before and strive to explore as many different functions as possible. Follow any specific advice 
-        provided by the tester to determine the most appropriate action. When your action type is "tap", remember to respond by specifying only the number 
+        Avoid repeating any action that has been performed before and strive to explore as many different functions as possible. The previous action is provided to you
+        in a json file. Follow any specific advice provided by the examiner to determine the most appropriate action. When your action type is "tap", remember to respond by specifying only the number 
         tagged on the UI element after "id:". 
         """
 

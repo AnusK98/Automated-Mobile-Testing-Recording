@@ -24,7 +24,7 @@ def tester_pipeline(tester, AVD_NAME, iter_name):
     som_image_location, scaled_components = preprocess_image(AVD_NAME, image_name) # Process the image and save it to the SOM_processed_folder
     ui_id = ""
     orientation = 0
-    while (not isinstance(ui_id, int)) and (not isinstance(orientation, str)):
+    while ((not isinstance(ui_id, int)) and (not isinstance(orientation, str))):
         if MANUAL:
             print(som_image_location)
             ui_id = int(input("Enter the UI ID: "))
